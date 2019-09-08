@@ -1,0 +1,59 @@
+/**
+ *递归法中序遍历
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        if(root==null){
+            return new ArrayList<Integer>();
+        }
+        List<Integer> list=new ArrayList<>();
+        list.addAll(inorderTraversal(root.left));
+        list.add(root.val);
+        list.addAll(inorderTraversal(root.right));
+        return list;
+    }
+}
+
+
+/**
+ *中序遍历迭代法思想：先将所有最左节点压入栈，然后回退
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> list=new ArrayList<>();
+        Stack<TreeNode> stack=new Stack<>();
+        if(root==null){
+            return new ArrayList<>();            
+        }
+        stack.push(root);//将根节点加入栈
+        while(!stack.empty()){
+            TreeNode node=stack.peek();
+            if(node.left!=null){//如果当前节点的左子节点不为null，则继续将左子节点压入栈
+                stack.push(node.left);
+                node.left=null;//重要：将当前节点的左子节点置为null，以便下次循环到该节点时重复，造成死循环
+                continue;//压入最左节点时，不能牵扯右子节点，所以跳出本次循环
+            }else{//如果当前节点的左子节点为null，则访问该节点，且删除该节点
+                list.add(node.val);
+                stack.pop();
+            }
+            if(node.right!=null){//当前节点的左子节点为null时，才可能执行此操作，存在右子节点就入栈
+                stack.push(node.right);
+            }
+        }
+        return list;
+    }
+}

@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] inorder, int[] postorder){
+        if(postorder.length==0){//递归结束条件，当数组为空时，返回null，作为父节点的子节点
+            return null;
+        }
+        int val=postorder[postorder.length-1];//找到后序遍历数组中最后一个元素，作为根节点
+        int i=0;
+        for(;i<inorder.length;i++){//找到此根节点在中序遍历数组中的位置
+            if(val==inorder[i]){
+                break;
+            }
+        }
+        int temp=i;
+        int[] ina=new int[i];//分别将inorder和postorder数组拆分为两个数组
+        for(int j=0;j<i;j++){
+            ina[j]=inorder[j];
+        }
+        i=temp;
+        int[] inb=new int[inorder.length-i-1];
+        for(int j=0;j+i+1<inorder.length;j++){
+            inb[j]=inorder[j+i+1];
+        }
+        i=temp;
+        int[] posta=new int[i];
+        for(int j=0;j<i;j++){
+            posta[j]=postorder[j];
+        }
+        i=temp;
+        int[] postb=new int[inorder.length-i-1];
+        for(int j=0;j+i<postorder.length-1;j++){
+            postb[j]=postorder[j+i];
+        }
+        TreeNode root=new TreeNode(val);//构造节点
+        root.left=buildTree(ina,posta);//节点的左子节点
+        root.right=buildTree(inb,postb);//节点的右子节点
+        return root;
+    }
+}

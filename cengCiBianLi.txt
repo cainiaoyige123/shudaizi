@@ -1,0 +1,69 @@
+/**
+ *层次遍历主要使用队列这种数据结构
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if(root==null){
+            return true;
+        }
+        return isDuiCheng(root.left,root.right);
+    }
+    public boolean isDuiCheng(TreeNode left,TreeNode right){
+        if(left==null){
+            if(right==null){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        if(right==null){
+            return false;
+        }
+        if(left.val==right.val){
+            return isDuiCheng(left.left,right.right) && isDuiCheng(left.right,right.left);
+        }else{
+            return false;
+        }
+    }
+}
+
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if(root==null){//如果节点为null，则不可能有结果（只用来判断根节点，但要保证所有子节点不能到null）
+            return false;
+        }
+        if(root.val==sum){//如果sum和val相等，需判断其左右子节点是否为null
+            if(root.left==null && root.right==null){
+                return true;
+            }else{//不为null，则还需要重新递归（易错点，容易直接返回false）
+                sum=sum-root.val;
+                return hasPathSum(root.left,sum) || hasPathSum(root.right,sum);//当左右子节点存在true时就代表有符合条件的路径
+            }
+        }else{
+            if(root.left==null && root.right==null){
+                return false;
+            }
+            sum=sum-root.val;
+            return hasPathSum(root.left,sum) || hasPathSum(root.right,sum);
+        }
+        
+    }
+}
